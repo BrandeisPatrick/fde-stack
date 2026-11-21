@@ -107,11 +107,11 @@ All examples use Contoso, a made-up company.
 
 | Part | What happens |
 |---|---|
-| **1 · Start** | Reads the vault, checks the code, deployment and logins, then sends one status message. Questions follow one at a time. |
-| **2 · Work** | The main session orchestrates while agents build, each in its own worktree. |
-| **3 · Ship** | Branches are integrated, a PR opens with diagrams, and the build deploys. |
-| **4 · Story** | A private page shows the build as it happens, ready to share. |
-| **5 · Close** | Decisions and progress are written back to the vault. |
+| **1&nbsp;·&nbsp;Start** | Reads the vault, checks the code, deployment and logins, then sends one status message. Questions follow one at a time. |
+| **2&nbsp;·&nbsp;Work** | The main session orchestrates while agents build, each in its own worktree. |
+| **3&nbsp;·&nbsp;Ship** | Branches are integrated, a PR opens with diagrams, and the build deploys. |
+| **4&nbsp;·&nbsp;Story** | A private page shows the build as it happens, ready to share. |
+| **5&nbsp;·&nbsp;Close** | Decisions and progress are written back to the vault. |
 
 Skip what does not apply. A ten-minute fix needs part 1 and a PR.
 
@@ -168,12 +168,12 @@ With the plugin, each command is prefixed: `/fde:fde progress`.
 
 ## Data handling
 
-| | |
-|---|---|
-| **Reads** | Project repos, deployment state (read-only), meeting transcripts, and Teams and email if you enable them |
-| **Stores** | Notes and transcripts, only in your private vault |
-| **Never** | Puts client names, meeting quotes or commercial figures in repos, PRs or outside services. Never stores keys or tokens |
-| **Asks first** | Before deleting work, merging a PR or enabling GitHub Pages |
+<table>
+<tr><td><b>Reads</b></td><td>Project repos, deployment state (read-only), meeting transcripts, and Teams and email if you enable them</td></tr>
+<tr><td><b>Stores</b></td><td>Notes and transcripts, only in your private vault</td></tr>
+<tr><td><b>Never</b></td><td>Puts client names, meeting quotes or commercial figures in repos, PRs or outside services. Never stores keys or tokens</td></tr>
+<tr><td nowrap><b>Asks first</b></td><td>Before deleting work, merging a PR or enabling GitHub Pages</td></tr>
+</table>
 
 ## FAQ
 
