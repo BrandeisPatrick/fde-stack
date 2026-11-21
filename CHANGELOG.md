@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- README: a fuller page with two new diagrams (how a session runs, the agent team), an agent table, the vault layout and an FAQ.
+
 ## 1.1.0 · 2026-11-20
 
 - `/fde initialize`: a local vault with no remote works everywhere; workstreams are drafted or asked for on a new project; fewer repeated questions.

@@ -5,7 +5,7 @@ One skill, `skills/fde/`, shipped as a Claude Code plugin. The repo root is the 
 ## Rules
 
 - **Made-up data only.** Examples, images and the sample vault use fictional companies (Contoso, Fabrikam, Northwind) and `example.com`. Never a real client, person or URL.
-- **The images are generated.** Edit `EXAMPLES` in `docs/tools/render_replies.py`, then run it. Never edit an SVG by hand.
+- **The images are generated.** Edit `EXAMPLES` in `docs/tools/render_replies.py`, then run it. Never edit an SVG by hand. The README diagrams (`FIGURES`) come from the same script.
 - **The sample vault and the images must agree.** A number changed in one is changed in the other.
 - **The description says when to use the skill**, not how it works, and stays under 1,024 characters.
 - **The plugin name `fde` never changes.** Installed copies are keyed on it.
