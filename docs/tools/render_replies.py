@@ -248,6 +248,8 @@ def card(title, desc, blocks):
     return f"{head}<title>{esc(title)}</title><desc>{esc(desc)}</desc>{body}"
 
 
+# The examples show the sample vault in skills/fde/sample-vault. These rows must
+# match contoso-retail/project.md there; docs/tools/check_repo.py checks it.
 PROGRESS_ROWS = [
     ["SOW", "`████████░░`", "80%", "With legal since 3/5"],
     ["Scope", "`█████░░░░░`", "50%", "Returns added 3/3"],

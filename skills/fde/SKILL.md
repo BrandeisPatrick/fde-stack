@@ -12,7 +12,7 @@ How a forward-deployed engineer (FDE) runs a client project with Claude Code: ge
 
 ## Your settings
 
-The skill reads your own settings from `~/.claude/fde.local.md`, so the skill itself holds nothing personal. Nobody fills it in by hand: when the file is missing, `/fde initialize` works the values out, confirms them once and writes it (see *First run* in part 9), and a first `/fde` does the same before it starts. The vault views (parts 7 and 8) ask nothing, so when the file is missing they stop and point to `/fde initialize`. `fde.local.example.md` in the fde-stack repo shows what the file looks like.
+The skill reads your own settings from `~/.claude/fde.local.md`, so the skill itself holds nothing personal. Nobody fills it in by hand: when the file is missing, `/fde initialize` works the values out, confirms them once and writes it (see *First run* in part 9), and a first `/fde` does the same before it starts. The vault views (parts 7 and 8) ask nothing, so when the file is missing they show the sample vault that ships with the skill instead (see *No settings yet* in part 7). `/fde` and `/fde initialize` never treat the sample as your vault and never write to it. `fde.local.example.md` in the fde-stack repo shows what the file looks like.
 
 | Setting | What it holds |
 |---|---|
@@ -399,6 +399,15 @@ These views show what the vault already records, so they are quick and read-only
   Name the project in the first line. If neither settles it, don't guess from the most recently updated folder: show the `/fde project` list and ask which one.
 - **Recorded, not proven:** each view shows the date its source was last updated. When the timeline has entries newer than that date, mark the view ⚠ and point to `/fde`, which refreshes everything.
 
+### No settings yet: the sample vault
+
+When `~/.claude/fde.local.md` is missing, these views read the sample vault bundled with the skill at `${CLAUDE_SKILL_DIR}/sample-vault` instead of stopping (source: [sample-vault/README.md](sample-vault/README.md)). Everything in it is made up.
+
+- **First line:** say it is sample data, and that `/fde initialize` sets up your own vault. Then show the view as usual.
+- **No pull:** the sample is part of the skill, not a Git repo of its own. Skip `git pull`, and take dates from the files rather than from `git log`.
+- **Which project:** with no name, use `contoso-retail`, the sample's fully recorded project.
+- **Read-only:** never write to the sample, and never offer to.
+
 ### progress
 
 ```markdown
@@ -496,6 +505,8 @@ Start from the Code and Deployment tables in `project.md`, and add `git worktree
 
 The view writes nothing back; `/fde` and the close of session (part 5) update the vault. It fixes nothing either: pulling, pushing and redeploying stay the user's call.
 
+**With no settings,** it reads the sample vault as part 7 does (*No settings yet*). It runs no live checks, not even a fetch. It shows the sample's recorded values from the Code and Deployment tables in the same shape, the diagram and the table, with "recorded" in the last column. The first line says it is sample data, recorded and not checked, and that `/fde initialize` sets up your own.
+
 ---
 
 ## 9. Initialize: the readiness checklist
@@ -520,8 +531,8 @@ When `~/.claude/fde.local.md` is missing, set it up before the checks. The user 
 | Setting | How to work it out |
 |---|---|
 | GitHub account | The active account in `gh auth status`. A second signed-in account is listed as the second one, and its purpose is asked. |
-| Vault | An existing one first: a local clone whose top folder has `platforms/` or project folders with a `project.md` (look in the workspace and `~/code`), then a private repo named like `*-vault` in `gh repo list <account> --visibility private`. Clone it if it is only on GitHub. |
-| Workspace | The folder that holds the fde-stack clone (follow the `~/.claude/skills/fde` link), or `~/code` |
+| Vault | An existing one first: a local clone whose top folder has `platforms/` or project folders with a `project.md` (look in the workspace and `~/code`; the skill's own `sample-vault` never counts), then a private repo named like `*-vault` in `gh repo list <account> --visibility private`. Clone it if it is only on GitHub. |
+| Workspace | The folder holding the fde-stack clone when the skill is a symlink to one, otherwise `~/code` |
 | Transcripts, Teams and email | "pasted in" and "screenshots", the defaults that need no tool |
 
 - **One question.** Show the values found as a short table and ask "Use these?", with the recommended set first. Write the file on a yes; on a correction, change that value and write it.

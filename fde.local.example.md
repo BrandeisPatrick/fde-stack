@@ -1,6 +1,6 @@
 # fde: my settings
 
-`/fde initialize` writes this file for you at `~/.claude/fde.local.md`; this is what it looks like. Edit it by hand only to change a value. The `fde` skill reads it at the start of every run. It holds no secrets: never put a token, key or password here.
+`/fde initialize` writes this file for you at `~/.claude/fde.local.md`; this is what it looks like. Edit it by hand only to change a value. The `fde` skill reads it at the start of every run; until it exists, the vault views show the sample vault bundled with the skill. It holds no secrets: never put a token, key or password here.
 
 ## Vault
 - Repo: <owner>/<your-name>-vault, private, in an account or org approved for client data. An internal or public repo fails the vault's safe-place check. If you don't have one yet, `/fde` offers to create it.
