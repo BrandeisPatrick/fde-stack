@@ -84,6 +84,6 @@ git clone https://github.com/BrandeisPatrick/fde-stack ~/code/fde-stack
 mkdir -p ~/.claude/skills && ln -s ~/code/fde-stack/skills/fde ~/.claude/skills/fde
 ```
 
-Then run `/fde initialize` in Claude Code. It finds your private [vault](skills/fde/references/vault-layout.md) (or offers to create one), writes your settings, and checks that everything is ready.
+Then run `/fde initialize` in Claude Code. It finds your private [vault](skills/fde/references/vault-layout.md) (or offers to create one), writes your settings, and checks that everything is ready. Run it again for each new project: your settings are kept, and it sets up that project.
 
 v1 · [How it works](skills/fde/SKILL.md)

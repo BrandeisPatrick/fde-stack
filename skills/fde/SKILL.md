@@ -500,7 +500,16 @@ The view writes nothing back; `/fde` and the close of session (part 5) update th
 
 ## 9. Initialize: the readiness checklist
 
-`/fde initialize [project]` runs every check a session depends on, for the active project, and shows the results as one checklist. It is the checking half of `/fde`: it reads no meeting content, Teams or email, and sends no status message. Use it on a new project, a new laptop, or whenever something feels off. It picks the project the same way as part 7.
+`/fde initialize [project]` runs every check a session depends on, for the active project, and shows the results as one checklist. It is the checking half of `/fde`: it reads no meeting content, Teams or email, and sends no status message. Use it on a new project, a new laptop, or whenever something feels off.
+
+**Run it as often as you like.** Each run sets up or re-checks one project, and running it again never repeats or undoes anything:
+
+- Your settings are written once. A later run reads them and goes straight to the project.
+- A project that is already set up is only re-checked.
+- A project the vault has no folder for is set up by this run (see *A new project* below).
+- Other projects are never touched.
+
+**Which project.** The name after the command (`/fde initialize fabrikam`) wins. With no name, use the working directory when it is a repo, worktree or vault folder, whether or not the vault knows it yet; then the project this conversation has been working on. If neither settles it, show the `/fde project` list with "a new project" as the last choice, and ask.
 
 It changes nothing except pulling the vault and, on a first run, writing your settings. Every fix waits for a yes.
 
@@ -520,7 +529,18 @@ When `~/.claude/fde.local.md` is missing, set it up before the checks. The user 
 - **A cloud-synced folder.** If the workspace or vault would sit inside iCloud Drive, Dropbox or a synced `~/Documents`, say so and suggest `~/code` instead.
 - **Never a secret.** The file holds names and paths only.
 
-Then carry on to the checks in the same run.
+Then carry on to the project in the same run.
+
+### A new project
+
+When the vault has no folder for the project, set one up before the checks, the same way as the settings: work the facts out, then confirm them in one question.
+
+- **Name:** the argument, or the repo's name when run inside a clone.
+- **Code:** the working directory's `origin` remote, its default branch and the clone path.
+- **Deployment:** left empty, unless the repo names one (a deploy workflow, a `cloudbuild.yaml`, a Terraform project id).
+- **On a yes,** create the folder as [vault-layout.md](references/vault-layout.md) describes, with `project.md` filled in from the above and an empty `timeline.md`, then commit and push the vault. Rows that nothing could fill stay empty, and the checks below report them.
+
+A folder older than this skill, with a README but no `project.md`, is not new: check 2 reports it, and drafting the facts card is one of the questions.
 
 ### The checks
 
