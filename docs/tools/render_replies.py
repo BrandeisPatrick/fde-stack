@@ -110,6 +110,7 @@ def box(x, y, w, h, colors, title, *subs):
     gap = 18
     top = y + h / 2 - gap * (len(lines) - 1) / 2
     for n, (t, size, wt, c) in enumerate(lines):
+        assert width(t, size, "b" if wt == "600" else "r") <= w - 10, ("box text too wide", t)
         s.append(f'<text x="{x + w / 2}" y="{top + n * gap:.1f}" text-anchor="middle" dominant-baseline="central" font-size="{size}" font-weight="{wt}" fill="{c}">{esc(t)}</text>')
     return "".join(s)
 
@@ -148,7 +149,52 @@ def diagram_visual():
     return "".join(s), 188
 
 
-DIAGRAMS = {"architecture": diagram_architecture, "visual": diagram_visual}
+def line_path(d):
+    return f'<path d="{d}" fill="none" stroke="{ARROW}" stroke-width="1.25"/>'
+
+
+def note(x, y, text, anchor="start"):
+    return f'<text x="{x}" y="{y}" text-anchor="{anchor}" dominant-baseline="central" font-size="12" fill="{MUTED}">{esc(text)}</text>'
+
+
+def diagram_session():
+    """The five parts of a session, and the vault they read from and write to."""
+    s = []
+    steps = [("1 · Start", "one status message"), ("2 · Work", "agents in worktrees"),
+             ("3 · Ship", "PRs with diagrams"), ("5 · Close", "notes written back")]
+    for n, (title, sub_) in enumerate(steps):
+        x = 14 + n * 168
+        s.append(box(x, 20, 148, 64, GRAY, title, sub_))
+        if n < 3:
+            s.append(arrow_path(f"M{x + 151} 52 H{x + 164}"))
+    s.append(box(182, 114, 316, 50, GRAY, "4 · Story page", "progress as it happens, ready to share"))
+    s.append(arrow_path("M256 87 V110", dashed=True))
+    s.append(arrow_path("M424 87 V110", dashed=True))
+    s.append(box(14, 196, 652, 52, GRAY, "Private vault", "facts, timeline and meeting notes for every project"))
+    s.append(arrow_path("M88 193 V88"))
+    s.append(note(98, 140, "reads"))
+    s.append(arrow_path("M592 87 V192"))
+    s.append(note(582, 140, "writes back", anchor="end"))
+    return "".join(s), 262
+
+
+def diagram_team():
+    """The orchestrator and the agents it briefs."""
+    s = [box(14, 16, 652, 56, GRAY, "Orchestrator · Opus", "plans, briefs, reviews and tracks · writes no product code")]
+    agents = [("Scout", "maps the code"), ("Platform", "cloud, deploys"), ("Feature", "one per feature"),
+              ("Integrator", "merges, tests"), ("Reviewer", "before deploys"), ("QA", "red team, UX")]
+    s.append(line_path("M340 72 V86"))
+    s.append(line_path("M64 86 H616"))
+    for n, (title, sub_) in enumerate(agents):
+        x = 14 + n * 110.4
+        s.append(box(round(x, 1), 102, 100, 58, GRAY, title, sub_))
+        s.append(arrow_path(f"M{x + 50:.1f} 86 V98"))
+    s.append(box(14, 182, 652, 50, GRAY, "Story", "turns the run log and git history into the story page"))
+    return "".join(s), 246
+
+
+DIAGRAMS = {"architecture": diagram_architecture, "visual": diagram_visual,
+            "session": diagram_session, "team": diagram_team}
 
 
 def render(blocks):
@@ -372,12 +418,27 @@ EXAMPLES = {
 }
 
 
+FIGURES = {
+    "how-it-works": ("How a session runs", "Start, work, ship and close in a row, the story page under work and ship, and the private vault under all of it.", [
+        ("diagram", "session"),
+    ]),
+    "agent-team": ("The agent team", "An Opus orchestrator above six agents (scout, platform, feature, integrator, reviewer, QA), with the story agent below.", [
+        ("diagram", "team"),
+    ]),
+}
+
+
 def main():
     here = os.path.dirname(os.path.abspath(__file__))
     out_dir = os.path.join(here, "..", "assets", "screens")
     os.makedirs(out_dir, exist_ok=True)
     for name, (title, desc, blocks) in EXAMPLES.items():
         path = os.path.join(out_dir, f"fde-{name}.svg" if name != "fde" else "fde.svg")
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(card(title, desc, blocks))
+        print("wrote", os.path.relpath(path, os.path.join(here, "..", "..")))
+    for name, (title, desc, blocks) in FIGURES.items():
+        path = os.path.join(here, "..", "assets", f"{name}.svg")
         with open(path, "w", encoding="utf-8") as f:
             f.write(card(title, desc, blocks))
         print("wrote", os.path.relpath(path, os.path.join(here, "..", "..")))
