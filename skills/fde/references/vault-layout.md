@@ -5,7 +5,7 @@ The vault is a private Git repo that holds your project context: one folder per 
 ```text
 <vault>/
 ├── README.md               index table, one row per folder
-├── platforms/              defaults shared by every project
+├── platforms/              defaults shared by every project (starts as a one-line README.md)
 │   ├── gcp.md
 │   ├── aws.md
 │   └── dependencies.md

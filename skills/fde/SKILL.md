@@ -22,6 +22,8 @@ The skill reads your own settings from `~/.claude/fde.local.md`, so the skill it
 | Transcripts | The tool you pull meeting transcripts with, or "pasted in" |
 | Teams and email | The method you usually read them with |
 
+**A vault with no remote.** A vault may be a local folder with no remote, recorded in settings as `Repo: none (local folder)`. Everywhere this skill says to pull or push the vault, skip that step for such a vault, and say so once per run rather than treating it as a failure. Commits still happen.
+
 ## Arguments
 
 This run's argument is: $ARGUMENTS
@@ -385,7 +387,7 @@ The weekly export is set up the same way and will hit the same wall.
 
 ## 7. Quick views: progress, context, timeline, project
 
-These views show what the vault already records, so they are quick and read-only. Pull the vault (`git pull --ff-only`), read the files, and show the view. They run no login checks, start no session, ask no questions, and write nothing back. They follow the status message's rules (1.6): tables, status marks, one line per item, and every line linked to its vault source.
+These views show what the vault already records, so they are quick and read-only. Pull the vault (`git pull --ff-only`, unless it has no remote), read the files, and show the view. They run no login checks, start no session, ask no questions, and write nothing back. They follow the status message's rules (1.6): tables, status marks, one line per item, and every line linked to its vault source.
 
 | View | Reads | Shows |
 |---|---|---|
@@ -452,7 +454,7 @@ The table from 1.6's *What changed*: oldest first, one row per day, each source 
 ### project
 
 ```markdown
-**Projects in the vault** · <n> set up
+**Projects in the vault** · <n> of <N> set up
 
 | Project | Stage | Last entry | |
 |---|---|---|---|
@@ -538,8 +540,7 @@ When `~/.claude/fde.local.md` is missing, set it up before the checks. The user 
 | Transcripts, Teams and email | "pasted in" and "screenshots", the defaults that need no tool |
 
 - **One question.** Show the values found as a short table and ask "Use these?", with the recommended set first. Write the file on a yes; on a correction, change that value and write it.
-- **No vault found.** Offer to create one as the same question's recommended option: a private repo `<account>/<account>-vault` (unless the user names it), cloned into the workspace, laid out as [vault-layout.md](references/vault-layout.md) describes, with an empty `platforms/` folder so a later run can recognise it. The second option is a local folder with no remote. Creating a repo needs the user's yes, and the safe-place check (check 1) then runs on it like any other vault.
-- **A vault with no remote.** Record it as `Repo: none (local folder)`. Skip every pull and push of the vault, and say so once per run rather than treating it as a failure.
+- **No vault found.** Offer to create one as the same question's recommended option: a private repo `<account>/<account>-vault` (unless the user names it), cloned into the workspace, laid out as [vault-layout.md](references/vault-layout.md) describes, with a one-line `platforms/README.md` so a later run can recognise it. The second option is a local folder with no remote: `<workspace>/<account>-vault` unless the user names it, created with `git init` so commits still work, and laid out the same way. Creating a repo needs the user's yes, and the safe-place check (check 1) then runs on it like any other vault.
 - **The file's shape.** Write it with the headings in [settings-template.md](references/settings-template.md).
 - **A cloud-synced folder.** If the workspace or vault would sit inside iCloud Drive, Dropbox or a synced `~/Documents`, say so and suggest `~/code` instead.
 - **Never a secret.** The file holds names and paths only.
@@ -553,6 +554,7 @@ When the vault has no folder for the project, set one up before the checks, the 
 - **Name:** the argument, or the repo's name when run inside a clone.
 - **Code:** the clone the command was run in, or else `<workspace>/<name>` when that is a clone. Record its `origin` remote, its path and its default branch (from `gh repo view --json defaultBranchRef`, else `origin/HEAD`, else the current branch, marked unconfirmed). When there is no clone in either place, ask for the repo.
 - **Access:** the transcript, Teams and email methods from your settings.
+- **Workstreams:** draft them from the repo's README when it says what is being built. When nothing can be drafted, ask for them in this same question. If the user says later, write `To add (deferred YYYY-MM-DD)` under the Workstreams heading.
 - **Deployment:** "none yet", unless the repo names one (a deploy workflow, a `cloudbuild.yaml`, a Terraform project id).
 - **On a yes,** create the folder as [vault-layout.md](references/vault-layout.md) describes, with `project.md` filled in from the above, an empty `timeline.md`, a README whose *State* gives the stage in one line, and a row in the vault's index, then commit and push the vault. Rows that nothing could fill stay empty, and the checks below report them.
 
@@ -563,7 +565,7 @@ A folder older than this skill, with a README but no `project.md`, is not new: c
 | # | Check | How | Ready when |
 |---|---|---|---|
 | 1 | Vault | Pull it, then run the safe-place check ([vault-layout.md](references/vault-layout.md)) | Cloned, current, private, and readable only by you and the org owners |
-| 2 | Project folder | Look for `project.md`, `timeline.md` and the README | All three exist, with Code filled in, Deployment filled in or "none yet", and at least one workstream. With none, the question offers to draft them from the README or the first meeting |
+| 2 | Project folder | Look for `project.md`, `timeline.md` and the README | All three exist, with Code filled in, Deployment filled in or "none yet", and at least one workstream. With none, the question offers to draft them from the README or the first meeting. A `To add (deferred …)` line less than a week old shows ⚠ and is not asked about again |
 | 3 | GitHub | `gh auth status`, then `viewerPermission` for each repo in Code (1.2) | The right account is active, with write access to every repo you push to |
 | 4 | Local code | Fetch, then compare each clone and worktree with its remote (1.2) | Each one matches its remote, with nothing uncommitted and no stale copies |
 | 5 | Cloud | `gcloud` and its application-default credentials, or `aws sts get-caller-identity` (1.3) | Signed in, and the project's services can be read |
@@ -571,9 +573,9 @@ A folder older than this skill, with a README but no `project.md`, is not new: c
 | 7 | Keys and services | Each row in Dependencies; for a secret, confirm it exists by name (`gcloud secrets describe <name> --format='value(name)'`), never by reading its value | Every dependency says where its key lives, and that secret exists |
 | 8 | Meetings | The transcript tool's sign-in, then list (never pull) meetings since the newest timeline entry (1.4) | Signed in, no entry marked `Transcript: missing`, and no meeting left out of the timeline |
 | 9 | Teams and email | The Access table in `project.md` (1.5) | A method is recorded for this project |
-| 10 | Latest context | The newest date in `timeline.md`: an entry, or its `Nothing newer, checked YYYY-MM-DD` line | Less than a week old. When the user answers "nothing newer", write that line at the top of `timeline.md`, so the next run does not ask again |
+| 10 | Latest context | The newest date in `timeline.md`: an entry, or its `Nothing newer, checked YYYY-MM-DD` line | Less than a week old. With an empty timeline, the question says so and asks whether anything has happened yet. When the user answers "nothing newer", write that line under the title of `timeline.md`, so the next run does not ask again |
 
-Run every check, even after one fails, so the user sees the whole picture at once. Skip a check that does not apply, and mark it — rather than ✗: a project with no deployment yet (5 and 6), no dependencies (7), or no transcript tool (8). The count in the first line is out of the checks that apply, so a new project with no deployment reads "2 of 6 ready", not "2 of 10". A repo in Code that GitHub cannot find is ✗ on check 3, and its question asks whether to fix the URL or create the repo.
+Run every check, even after one fails, so the user sees the whole picture at once. Skip a check that does not apply, and mark it — rather than ✗: a project with no deployment yet (5 and 6), no dependencies (7), or no transcript tool (8). The count in the first line is out of the checks that apply, so a new project with no deployment reads "2 of 6 ready", not "2 of 10". A repo in Code that GitHub cannot find is ✗ on check 3. Its question asks for the correct URL (recommended), or whether to create the repo; with neither, it stays ✗ and the Code row says "not found on GitHub". Check 4 then shows ⚠ "can't compare" for that clone and asks nothing more.
 
 ### What it shows
 
