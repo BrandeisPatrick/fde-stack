@@ -10,7 +10,7 @@ import os
 
 with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "char_widths.json"), encoding="utf-8") as _f:
     WIDTHS = json.load(_f)  # measured at 15px, where SF uses its Text metrics
-SAFE = 1.0  # room for fonts a little wider than the one measured
+SAFE = 1.0  # scale on measured widths; raise above 1.0 to leave room for wider fonts
 
 SANS = "system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
 MONO = "Menlo, ui-monospace, SFMono-Regular, Consolas, monospace"

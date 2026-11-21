@@ -1,6 +1,6 @@
 ---
 name: fde
-description: Forward-deployed-engineer (FDE) workflow for running a client project with Claude Code. Session start - open your project vault, find the code and the GCP or AWS deployment, prove cloud and GitHub access, check local code against the remote, read the timeline, new meetings, Teams and email, then send one concise status message. Work - latest Opus orchestrates, Sonnet codes, Haiku takes trivial jobs; specialist agents (platform, feature, integration, review, QA, story) each get a git worktree; every change lands through a PR with diagrams; a story page on GitHub Pages shows progress. Modes - visual, recap, progress, context, timeline, project, architecture, initialize. Use whenever a session starts on a client project ("let's work on <project>", "catch me up and keep going"), when planning a multi-agent build, when opening or updating a PR on a project repo, or when asked to show progress, context, the timeline, the project list or what runs where.
+description: Forward-deployed-engineer (FDE) workflow for running a client project with Claude Code. Session start - read the project vault, prove GitHub and cloud access, check local code against the remote, catch up on meetings, Teams and email, then send one concise status message. Work - Opus orchestrates while Sonnet agents build in git worktrees; every change lands through a PR with diagrams; a story page shows progress. Use whenever a session starts on a client project ("let's work on <project>", "catch me up and keep going"), when planning a multi-agent build, when opening or updating a PR on a project repo, or when asked to show progress, context, the timeline, the project list or what runs where.
 argument-hint: "[visual | recap | progress | context | timeline | project | architecture | initialize] [project | text | range]"
 ---
 
@@ -12,11 +12,12 @@ How a forward-deployed engineer (FDE) runs a client project with Claude Code: ge
 
 ## Your settings
 
-The skill reads your own settings from `~/.claude/fde.local.md`, so the skill itself holds nothing personal. If the file is missing, the first `/fde` asks for your vault (one question), writes the file, and carries on. `fde.local.example.md` in the fde-stack repo is the template.
+The skill reads your own settings from `~/.claude/fde.local.md`, so the skill itself holds nothing personal. If the file is missing, the first `/fde` asks for your vault (one question), writes the file, and carries on. The vault views (parts 7 and 8) ask nothing, so when the file is missing they stop and point to `/fde initialize`, which sets it up. `fde.local.example.md` in the fde-stack repo is the template.
 
 | Setting | What it holds |
 |---|---|
 | Vault | The private repo that holds your project context, and where it is cloned |
+| Workspace | The folder that holds project clones and agent worktrees (`<workspace>` below) |
 | GitHub | Your default account, and what any second account is for |
 | Transcripts | The tool you pull meeting transcripts with, or "pasted in" |
 | Teams and email | The method you usually read them with |
