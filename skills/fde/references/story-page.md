@@ -78,6 +78,18 @@ The `gh-pages` branch is an orphan that holds only the built site: `index.html`,
 
 **First time.** Ask the user before enabling Pages, because it publishes the page to everyone with read access to the repo.
 
+**Check the plan first.** Private Pages (access control) exists only for repos owned by an organisation on GitHub Enterprise Cloud. On a personal account, or an org on Free or Team, Pages for a private repo is **public on the internet**, and so is the story page. Before enabling anything:
+
+```bash
+gh repo view <org>/<repo> --json owner,visibility --jq '.owner.login, .visibility'
+```
+
+```bash
+gh api orgs/<org> --jq '.plan.name'
+```
+
+Go on only when the owner is an organisation and the plan is `enterprise`. If the owner is a personal account, the plan is anything else, or the call can't read the plan, don't enable Pages: tell the user why, and publish an artifact copy (below) instead.
+
 ```bash
 git -C <repo> worktree add --detach <workspace>/<project>/wt/gh-pages
 ```
@@ -96,7 +108,7 @@ gh api -X POST repos/<org>/<repo>/pages -f 'source[branch]=gh-pages' -f 'source[
 gh api repos/<org>/<repo>/pages --jq '.html_url, .public'
 ```
 
-`public` should be `false`. A private repo's Pages URL is a random subdomain such as `<words>-<code>.pages.github.io`, not `<org>.github.io/<repo>`. Take the URL from this call, and record it in `project.md` and the repo README.
+`public` should be `false`. If it is `true`, the page is already live for anyone: turn Pages off at once with `gh api -X DELETE repos/<org>/<repo>/pages`, then tell the user. A private repo's Pages URL is a random subdomain such as `<words>-<code>.pages.github.io`, not `<org>.github.io/<repo>`. Take the URL from this call, and record it in `project.md` and the repo README.
 
 **Each update:**
 1. Rebuild with the build script.
