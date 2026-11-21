@@ -12,7 +12,7 @@ How a forward-deployed engineer (FDE) runs a client project with Claude Code: ge
 
 ## Your settings
 
-The skill reads your own settings from `~/.claude/fde.local.md`, so the skill itself holds nothing personal. If the file is missing, the first `/fde` asks for your vault (one question), writes the file, and carries on. The vault views (parts 7 and 8) ask nothing, so when the file is missing they stop and point to `/fde initialize`, which sets it up. `fde.local.example.md` in the fde-stack repo is the template.
+The skill reads your own settings from `~/.claude/fde.local.md`, so the skill itself holds nothing personal. Nobody fills it in by hand: when the file is missing, `/fde initialize` works the values out, confirms them once and writes it (see *First run* in part 9), and a first `/fde` does the same before it starts. The vault views (parts 7 and 8) ask nothing, so when the file is missing they stop and point to `/fde initialize`. `fde.local.example.md` in the fde-stack repo shows what the file looks like.
 
 | Setting | What it holds |
 |---|---|
@@ -502,7 +502,25 @@ The view writes nothing back; `/fde` and the close of session (part 5) update th
 
 `/fde initialize [project]` runs every check a session depends on, for the active project, and shows the results as one checklist. It is the checking half of `/fde`: it reads no meeting content, Teams or email, and sends no status message. Use it on a new project, a new laptop, or whenever something feels off. It picks the project the same way as part 7.
 
-It changes nothing except pulling the vault. Every fix waits for a yes.
+It changes nothing except pulling the vault and, on a first run, writing your settings. Every fix waits for a yes.
+
+### First run: write the settings
+
+When `~/.claude/fde.local.md` is missing, set it up before the checks. The user should not have to find or type a path: work each value out, then confirm them all in one question.
+
+| Setting | How to work it out |
+|---|---|
+| GitHub account | The active account in `gh auth status`. A second signed-in account is listed as the second one, and its purpose is asked. |
+| Vault | An existing one first: a local clone whose top folder has `platforms/` or project folders with a `project.md` (look in the workspace and `~/code`), then a private repo named like `*-vault` in `gh repo list <account> --visibility private`. Clone it if it is only on GitHub. |
+| Workspace | The folder that holds the fde-stack clone (follow the `~/.claude/skills/fde` link), or `~/code` |
+| Transcripts, Teams and email | "pasted in" and "screenshots", the defaults that need no tool |
+
+- **One question.** Show the values found as a short table and ask "Use these?", with the recommended set first. Write the file on a yes; on a correction, change that value and write it.
+- **No vault found.** Offer to create one as the same question's recommended option: a private repo `<account>/<name>-vault`, cloned into the workspace, laid out as [vault-layout.md](references/vault-layout.md) describes. Creating a repo needs the user's yes, and the safe-place check (check 1) then runs on it like any other vault.
+- **A cloud-synced folder.** If the workspace or vault would sit inside iCloud Drive, Dropbox or a synced `~/Documents`, say so and suggest `~/code` instead.
+- **Never a secret.** The file holds names and paths only.
+
+Then carry on to the checks in the same run.
 
 ### The checks
 

@@ -10,7 +10,7 @@ A Claude Code skill for running a client project as a forward-deployed engineer.
 </details>
 
 <details>
-<summary><code>/fde initialize</code> · check everything is ready</summary>
+<summary><code>/fde initialize</code> · set up, then check everything is ready</summary>
 
 ![Claude Code reply to /fde initialize: a ten-row checklist and the login command to run.](docs/assets/screens/fde-initialize.svg)
 
@@ -84,10 +84,6 @@ git clone https://github.com/BrandeisPatrick/fde-stack ~/code/fde-stack
 mkdir -p ~/.claude/skills && ln -s ~/code/fde-stack/skills/fde ~/.claude/skills/fde
 ```
 
-```bash
-cp ~/code/fde-stack/fde.local.example.md ~/.claude/fde.local.md
-```
-
-Point `~/.claude/fde.local.md` at your private [vault](skills/fde/references/vault-layout.md), then run `/fde initialize`.
+Then run `/fde initialize` in Claude Code. It finds your private [vault](skills/fde/references/vault-layout.md) (or offers to create one), writes your settings, and checks that everything is ready.
 
 v1 · [How it works](skills/fde/SKILL.md)
