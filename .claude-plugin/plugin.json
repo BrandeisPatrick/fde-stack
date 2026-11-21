@@ -5,5 +5,14 @@
     "name": "BrandeisPatrick"
   },
   "repository": "https://github.com/BrandeisPatrick/fde-stack",
-  "license": "MIT"
+  "license": "MIT",
+  "homepage": "https://github.com/BrandeisPatrick/fde-stack",
+  "keywords": [
+    "fde",
+    "forward-deployed-engineer",
+    "client-projects",
+    "project-status",
+    "multi-agent",
+    "pull-requests"
+  ]
 }
