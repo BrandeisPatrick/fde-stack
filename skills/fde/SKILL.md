@@ -28,6 +28,8 @@ This run's argument is: $ARGUMENTS
 
 (If nothing follows the colon, there is no argument.)
 
+Under a plugin install the command is `/fde:fde`, for example `/fde:fde progress`; everything written here as `/fde ...` means that.
+
 | Command | What it does |
 |---|---|
 | `/fde` | Start of session (part 1). Ask which project if neither the folder nor the conversation makes it clear. |

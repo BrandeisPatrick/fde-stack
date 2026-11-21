@@ -1,0 +1,9 @@
+{
+  "name": "fde",
+  "description": "Forward-deployed engineer workflow for running a client project with Claude Code: catch up from a private vault, build with a team of agents, ship through PRs with diagrams.",
+  "author": {
+    "name": "BrandeisPatrick"
+  },
+  "repository": "https://github.com/BrandeisPatrick/fde-stack",
+  "license": "MIT"
+}

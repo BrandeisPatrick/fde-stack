@@ -1,0 +1,14 @@
+{
+  "name": "fde-stack",
+  "owner": {
+    "name": "BrandeisPatrick"
+  },
+  "description": "The fde skill: a forward-deployed engineer workflow for Claude Code.",
+  "plugins": [
+    {
+      "name": "fde",
+      "source": "./",
+      "description": "Forward-deployed engineer workflow: catch up from a private vault, build with a team of agents, ship through PRs with diagrams."
+    }
+  ]
+}
