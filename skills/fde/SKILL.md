@@ -12,7 +12,7 @@ How a forward-deployed engineer (FDE) runs a client project with Claude Code: ge
 
 ## Your settings
 
-The skill reads your own settings from `~/.claude/fde.local.md`, so the skill itself holds nothing personal. Nobody fills it in by hand: when the file is missing, `/fde initialize` works the values out, confirms them once and writes it (see *First run* in part 9), and a first `/fde` does the same before it starts. The vault views (parts 7 and 8) ask nothing, so when the file is missing they show the sample vault that ships with the skill instead (see *No settings yet* in part 7). `/fde` and `/fde initialize` never treat the sample as your vault and never write to it. `fde.local.example.md` in the fde-stack repo shows what the file looks like.
+The skill reads your own settings from `~/.claude/fde.local.md`, so the skill itself holds nothing personal. Nobody fills it in by hand: when the file is missing, `/fde initialize` works the values out, confirms them once and writes it (see *First run* in part 9), and a first `/fde` does the same before it starts. The vault views (parts 7 and 8) ask nothing, so when the file is missing they show the sample vault that ships with the skill instead (see *No settings yet* in part 7). `/fde` and `/fde initialize` never treat the sample as your vault and never write to it. [references/settings-template.md](references/settings-template.md) shows what the file looks like.
 
 | Setting | What it holds |
 |---|---|
@@ -461,7 +461,7 @@ The table from 1.6's *What changed*: oldest first, one row per day, each source 
 ```
 
 - **Rows:** one per vault folder, newest first, leaving out folders that are not projects (tools, a worklog).
-- **Stage:** from `project.md` or the README's *State* when the folder has them, otherwise the folder's line in the vault index.
+- **Stage:** from the README's *State* when the folder has one, otherwise the folder's line in the vault index.
 - **Last entry:** the newest `timeline.md` date, or the folder's last commit (`git log -1 --format=%cs -- <folder>`) when it has no timeline.
 - **Last column:** ✓ when the folder has both `project.md` and `timeline.md`. Otherwise "no facts card", because `/fde` will draft one the first time the project is opened (1.1).
 
