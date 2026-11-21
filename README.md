@@ -9,7 +9,7 @@ A Claude Code skill for running a client project as a forward-deployed engineer.
 </tr>
 </table>
 
-These are replies to the bundled sample project, Contoso, a made-up company.
+Both are example replies with made-up data. The progress bars are for Contoso, the sample project that ships with the skill.
 
 ## Try it in two minutes
 
