@@ -3,7 +3,7 @@
 `/fde initialize` writes this file for you at `~/.claude/fde.local.md`; this is what it looks like. Edit it by hand only to change a value. The `fde` skill reads it at the start of every run; until it exists, the vault views show the sample vault bundled with the skill. It holds no secrets: never put a token, key or password here.
 
 ## Vault
-- Repo: <owner>/<your-name>-vault, private, in an account or org approved for client data. An internal or public repo fails the vault's safe-place check. If you don't have one yet, `/fde` offers to create it.
+- Repo: <account>/<account>-vault, private, in an account or org approved for client data. An internal or public repo fails the vault's safe-place check. If you don't have one yet, `/fde` offers to create it.
 - Clone: ~/code/<your-name>-vault. Keep it out of iCloud, Dropbox or other cloud-synced folders; on a Mac that syncs Desktop and Documents, that includes ~/Documents.
 - Pushes: straight to main (it is a private notebook, not a project repo)
 

@@ -421,7 +421,7 @@ When `~/.claude/fde.local.md` is missing, these views read the sample vault bund
 | <name> | `█░░░░░░░░░` | 10% | <dated fact in a few words> |
 ```
 
-Use the 10-cell bars and percentages from `project.md` as they stand. Don't re-estimate, and don't average the workstreams into one total, because a single number hides the one that is stuck.
+Draw each 10-cell bar from the Estimate column in `project.md`, as it stands, and link the first line to `project.md`. When the table has no rows, say "no workstreams recorded yet" and stop. Don't re-estimate, and don't average the workstreams into one total, because a single number hides the one that is stuck.
 
 ### context
 
@@ -515,16 +515,16 @@ The view writes nothing back; `/fde` and the close of session (part 5) update th
 
 `/fde initialize [project]` runs every check a session depends on, for the active project, and shows the results as one checklist. It is the checking half of `/fde`: it reads no meeting content, Teams or email, and sends no status message. Use it on a new project, a new laptop, or whenever something feels off.
 
-**Run it as often as you like.** Each run sets up or re-checks one project, and running it again never repeats or undoes anything:
+**Run it as often as you like.** Each run sets up or re-checks one project, and running it again never redoes or undoes anything:
 
 - Your settings are written once. A later run reads them and goes straight to the project.
-- A project that is already set up is only re-checked.
+- A project that is already set up is only re-checked. A question is asked again only while its check still fails.
 - A project the vault has no folder for is set up by this run (see *A new project* below).
 - Other projects are never touched.
 
-**Which project.** The name after the command (`/fde initialize fabrikam`) wins. With no name, use the working directory when it is a repo, worktree or vault folder, whether or not the vault knows it yet; then the project this conversation has been working on. If neither settles it, show the `/fde project` list with "a new project" as the last choice, and ask.
+**Which project.** The name after the command (`/fde initialize fabrikam`) wins. With no name, use the project this conversation has been working on; then the working directory when it is a repo, worktree or vault folder, whether or not the vault knows it yet. If neither settles it, show the `/fde project` list with "a new project" as the last choice, and ask.
 
-It changes nothing except pulling the vault and, on a first run, writing your settings. Every fix waits for a yes.
+It writes only three things: your settings on a first run, a new vault or project folder you approved, and the answers you give to its questions. It also pulls the vault. Every other fix waits for a yes. The two setup questions (settings, a new project) come before the checklist; every other question comes after it, as 1.7 says.
 
 ### First run: write the settings
 
@@ -534,11 +534,13 @@ When `~/.claude/fde.local.md` is missing, set it up before the checks. The user 
 |---|---|
 | GitHub account | The active account in `gh auth status`. A second signed-in account is listed as the second one, and its purpose is asked. |
 | Vault | An existing one first: a local clone whose top folder has `platforms/` or project folders with a `project.md` (look in the workspace and `~/code`; the skill's own `sample-vault` never counts), then a private repo named like `*-vault` in `gh repo list <account> --visibility private`. Clone it if it is only on GitHub. |
-| Workspace | The folder holding the fde-stack clone when the skill is a symlink to one, otherwise `~/code` |
+| Workspace | `~/code`, or the folder the user's project clones already sit in when that is plainly somewhere else |
 | Transcripts, Teams and email | "pasted in" and "screenshots", the defaults that need no tool |
 
 - **One question.** Show the values found as a short table and ask "Use these?", with the recommended set first. Write the file on a yes; on a correction, change that value and write it.
-- **No vault found.** Offer to create one as the same question's recommended option: a private repo `<account>/<name>-vault`, cloned into the workspace, laid out as [vault-layout.md](references/vault-layout.md) describes. Creating a repo needs the user's yes, and the safe-place check (check 1) then runs on it like any other vault.
+- **No vault found.** Offer to create one as the same question's recommended option: a private repo `<account>/<account>-vault` (unless the user names it), cloned into the workspace, laid out as [vault-layout.md](references/vault-layout.md) describes, with an empty `platforms/` folder so a later run can recognise it. The second option is a local folder with no remote. Creating a repo needs the user's yes, and the safe-place check (check 1) then runs on it like any other vault.
+- **A vault with no remote.** Record it as `Repo: none (local folder)`. Skip every pull and push of the vault, and say so once per run rather than treating it as a failure.
+- **The file's shape.** Write it with the headings in [settings-template.md](references/settings-template.md).
 - **A cloud-synced folder.** If the workspace or vault would sit inside iCloud Drive, Dropbox or a synced `~/Documents`, say so and suggest `~/code` instead.
 - **Never a secret.** The file holds names and paths only.
 
@@ -549,9 +551,10 @@ Then carry on to the project in the same run.
 When the vault has no folder for the project, set one up before the checks, the same way as the settings: work the facts out, then confirm them in one question.
 
 - **Name:** the argument, or the repo's name when run inside a clone.
-- **Code:** the working directory's `origin` remote, its default branch and the clone path.
-- **Deployment:** left empty, unless the repo names one (a deploy workflow, a `cloudbuild.yaml`, a Terraform project id).
-- **On a yes,** create the folder as [vault-layout.md](references/vault-layout.md) describes, with `project.md` filled in from the above and an empty `timeline.md`, then commit and push the vault. Rows that nothing could fill stay empty, and the checks below report them.
+- **Code:** the clone the command was run in, or else `<workspace>/<name>` when that is a clone. Record its `origin` remote, its path and its default branch (from `gh repo view --json defaultBranchRef`, else `origin/HEAD`, else the current branch, marked unconfirmed). When there is no clone in either place, ask for the repo.
+- **Access:** the transcript, Teams and email methods from your settings.
+- **Deployment:** "none yet", unless the repo names one (a deploy workflow, a `cloudbuild.yaml`, a Terraform project id).
+- **On a yes,** create the folder as [vault-layout.md](references/vault-layout.md) describes, with `project.md` filled in from the above, an empty `timeline.md`, a README whose *State* gives the stage in one line, and a row in the vault's index, then commit and push the vault. Rows that nothing could fill stay empty, and the checks below report them.
 
 A folder older than this skill, with a README but no `project.md`, is not new: check 2 reports it, and drafting the facts card is one of the questions.
 
@@ -560,7 +563,7 @@ A folder older than this skill, with a README but no `project.md`, is not new: c
 | # | Check | How | Ready when |
 |---|---|---|---|
 | 1 | Vault | Pull it, then run the safe-place check ([vault-layout.md](references/vault-layout.md)) | Cloned, current, private, and readable only by you and the org owners |
-| 2 | Project folder | Look for `project.md`, `timeline.md` and the README | All three exist, with Code, Deployment and Workstreams filled in |
+| 2 | Project folder | Look for `project.md`, `timeline.md` and the README | All three exist, with Code filled in, Deployment filled in or "none yet", and at least one workstream. With none, the question offers to draft them from the README or the first meeting |
 | 3 | GitHub | `gh auth status`, then `viewerPermission` for each repo in Code (1.2) | The right account is active, with write access to every repo you push to |
 | 4 | Local code | Fetch, then compare each clone and worktree with its remote (1.2) | Each one matches its remote, with nothing uncommitted and no stale copies |
 | 5 | Cloud | `gcloud` and its application-default credentials, or `aws sts get-caller-identity` (1.3) | Signed in, and the project's services can be read |
@@ -568,14 +571,14 @@ A folder older than this skill, with a README but no `project.md`, is not new: c
 | 7 | Keys and services | Each row in Dependencies; for a secret, confirm it exists by name (`gcloud secrets describe <name> --format='value(name)'`), never by reading its value | Every dependency says where its key lives, and that secret exists |
 | 8 | Meetings | The transcript tool's sign-in, then list (never pull) meetings since the newest timeline entry (1.4) | Signed in, no entry marked `Transcript: missing`, and no meeting left out of the timeline |
 | 9 | Teams and email | The Access table in `project.md` (1.5) | A method is recorded for this project |
-| 10 | Latest context | The date of the newest timeline entry | Less than a week old |
+| 10 | Latest context | The newest date in `timeline.md`: an entry, or its `Nothing newer, checked YYYY-MM-DD` line | Less than a week old. When the user answers "nothing newer", write that line at the top of `timeline.md`, so the next run does not ask again |
 
-Run every check, even after one fails, so the user sees the whole picture at once. Skip a check that does not apply, such as a project with no deployment yet, and mark it — rather than ✗.
+Run every check, even after one fails, so the user sees the whole picture at once. Skip a check that does not apply, and mark it — rather than ✗: a project with no deployment yet (5 and 6), no dependencies (7), or no transcript tool (8). The count in the first line is out of the checks that apply, so a new project with no deployment reads "2 of 6 ready", not "2 of 10". A repo in Code that GitHub cannot find is ✗ on check 3, and its question asks whether to fix the URL or create the repo.
 
 ### What it shows
 
 ```markdown
-**<Project>** · initialize · <n> of 10 ready
+**<Project>** · initialize · <n> of <checks that apply> ready
 
 | | Check | Result | Fix |
 |---|---|---|---|
