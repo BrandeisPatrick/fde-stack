@@ -32,7 +32,9 @@ In Claude Code:
 /fde:fde progress
 ```
 
-This runs against a bundled [sample project](skills/fde/sample-vault/README.md), so there is nothing to set up. To use it on your own work, run `/fde:fde initialize` once per project.
+This runs against a bundled [sample project](skills/fde/sample-vault/README.md), so there is nothing to set up. You can also just ask: "how far along is Contoso?"
+
+To use it on your own work, run `/fde:fde initialize` once per project.
 
 <details>
 <summary>Install without the plugin</summary>
@@ -48,6 +50,12 @@ mkdir -p ~/.claude/skills && ln -s ~/code/fde-stack/skills/fde ~/.claude/skills/
 The command is then `/fde` instead of `/fde:fde`. Update with `git -C ~/code/fde-stack pull`.
 
 </details>
+
+## Why
+
+- **Start from facts.** Each session checks the code, the deployment and the latest decisions before anything is built.
+- **One message, then one question at a time.** Status comes as headlines with links, never a wall of text.
+- **Nothing gets lost.** Decisions, meetings and progress are written back to a private vault that any session can pick up.
 
 ## Commands
 
@@ -83,6 +91,6 @@ During a build, Opus plans and reviews while Sonnet agents work in separate work
 
 The desktop app shows questions as buttons and draws diagrams inline. The terminal uses plain text and tables.
 
-## License
+## More
 
-MIT · [How it works](skills/fde/SKILL.md)
+[How it works](skills/fde/SKILL.md) · [Changelog](CHANGELOG.md) · MIT license

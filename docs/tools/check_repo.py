@@ -3,7 +3,8 @@
 
 Run from anywhere: python3 -I docs/tools/check_repo.py
 Fails (exit 1) unless:
-- the SKILL.md frontmatter description is at most 1,024 characters;
+- the SKILL.md frontmatter description is at most 1,024 characters and starts with "Use when";
+- SKILL.md is at most 700 lines;
 - both .claude-plugin/*.json files parse, and the marketplace's plugin entry
   has the same name as plugin.json;
 - every relative markdown link in the README, SKILL.md, the references and
@@ -45,6 +46,11 @@ def check_description():
     value = desc.group(1).strip().strip('"').strip("'")
     if len(value) > 1024:
         errors.append(f"SKILL.md: description is {len(value)} characters, over 1,024")
+    if not value.startswith("Use when"):
+        errors.append('SKILL.md: description must start with "Use when" (say when to use it, not how it works)')
+    lines = text.count("\n")
+    if lines > 700:
+        errors.append(f"SKILL.md: {lines} lines, over 700; move detail into references/")
 
 
 def check_plugin():

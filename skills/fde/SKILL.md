@@ -1,6 +1,6 @@
 ---
 name: fde
-description: Forward-deployed-engineer (FDE) workflow for running a client project with Claude Code. Session start - read the project vault, prove GitHub and cloud access, check local code against the remote, catch up on meetings, Teams and email, then send one concise status message. Work - Opus orchestrates while Sonnet agents build in git worktrees; every change lands through a PR with diagrams; a story page shows progress. Use whenever a session starts on a client project ("let's work on <project>", "catch me up and keep going"), when planning a multi-agent build, when opening or updating a PR on a project repo, or when asked to show progress, context, the timeline, the project list or what runs where.
+description: Use when starting or resuming work on a client project as a forward-deployed engineer ("let's work on <project>", "catch me up", "where are we with <client>"), when setting up a project or checking it is ready ("is everything set up"), when asked for a project's progress, timeline, facts, the project list or what runs where, and when planning a multi-agent build or opening a PR on a client project repo.
 argument-hint: "[visual | recap | progress | context | timeline | project | architecture | initialize] [project | text | range]"
 ---
 
