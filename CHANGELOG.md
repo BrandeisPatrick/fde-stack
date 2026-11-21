@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.1.0 · 2026-11-20
+
 - `/fde initialize`: a local vault with no remote works everywhere; workstreams are drafted or asked for on a new project; fewer repeated questions.
 - The skill's description now says when to use it, so it triggers on plain requests such as "catch me up".
 - Shorter README with a quick start and a command table.
